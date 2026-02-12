@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Marksheet</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+          rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          rel="stylesheet" />
+
+    <style type="text/css">
+        @page {
+            size: A4;
+            margin: 5mm;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI';
+        }
+
+
+        .marksheet {
+            width: 190mm;              /* A4 safe width */
+            margin: 0 auto;
+            background-color: white;
+
+            border: 4px groove #000;   /* 👈 groove border */
+            border-radius: 8px;
+
+
+            box-shadow: none;          /* remove shadow for formal look */
+            overflow: hidden;
+
+            min-height: 277mm;
+            padding-bottom: 5mm;
+            box-sizing: border-box;
+
+
+            transform: scale(0.97);
+            transform-origin: top center;
+
+
+
+
+        }
+
+        .marksheet-header {
+            background: linear-gradient(135deg, #3a8eba 0%, #2c3e50 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .marksheet-logo {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .marksheet-logo img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+
+        .student-photo {
+            width: 100px;
+            height: 120px;
+            border: 3px solid white;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .student-photo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+
+        .marksheet-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .student-info {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
+        }
+
+        .info-item {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 5px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .marks-table th {
+            background-color: #3a8eba;
+            color: white;
+            font-weight: 500;
+        }
+
+        .grade-a {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .grade-b {
+            color: #17a2b8;
+            font-weight: bold;
+        }
+
+        .grade-c {
+            color: #fd7e14;
+            font-weight: bold;
+        }
+
+        .grade-f {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .result-section {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .result-box {
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 15px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .table-responsive {
+            margin: 5px 0;   /* Reduce top and bottom space */
+        }
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .signature {
+            text-align: center;
+            width: 150px;
+        }
+
+        .signature-line {
+            width: 100%;
+            border-top: 1px solid #000;
+            margin-bottom: 5px;
+        }
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            
+            opacity: 0.1;
+            color: #000;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="text-end mb-3 no-print">
+        <button onclick="downloadPDF()" class="btn btn-primary">
+            Download PDF
+        </button>
+    </div>
+    <div class="marksheet position-relative">
+        <div class="watermark">
+            <img th:src="@{/image/school_logo.png}" alt="Watermark" />
+        </div>
+
+        <!-- Header -->
+        <div class="marksheet-header">
+            <div class="marksheet-logo">
+                <!-- <i class="fas fa-graduation-cap fa-3x" style="color:#3a8eba;"></i> -->
+                 <img th:src="@{/image/school_logo.png}"
+                        alt="School Logo"
+                        class="marksheet-logo-img" />
+            </div>
+            <div class="marksheet-title">EVERGREEN PUBLIC SCHOOL</div>
+            <div>Academic Year 2024-2025</div>
+            <div class="mt-2">STUDENT MARKSHEET</div>
+
+            <div class="student-photo">
+                <!-- <i class="fas fa-user fa-3x text-secondary"></i> -->
+                 <img th:src="${studentPhoto}"
+                            alt="Student Photo"
+                            class="student-photo-img" />
+            </div>
+        </div>
+
+        <!-- Student Information -->
+        <div class="student-info">
+            <div class="info-row">
+                <div class="info-item">
+                    <div class="info-label">Student Name:</div>
+                    <div th:text="${#strings.toUpperCase(data.studentName)}"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Roll Number:</div>
+                    <div th:text="${data.rollNo}"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Class:</div>
+                    <div th:text="${data.studentClass}"></div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-item">
+                    <div class="info-label">Date of Birth:</div>
+                    <div th:text="${data.dateOfBirth}"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Father&#39;s Name:</div>
+                    <div th:text="${data.fatherName}"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Mother&#39;s Name:</div>
+                    <div th:text="${data.motherName}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marks Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered marks-table mb-0">
+                <thead>
+                <tr>
+                    <th>Sl no.</th>
+                    <th>Subject</th>
+                    <th>Full Marks</th>
+                    <th>Pass Marks</th>
+                    <th>Obtained</th>
+                    <th>Grade</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="subject,iterStat : ${subjects}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${subject.name}"></td>
+                    <td >100</td>
+                    <td >30</td>
+                    <td th:text="${subject.marks}"></td>
+                    <td class="grade-a">A</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr class="table-secondary">
+                    <td colspan="2" class="text-end fw-bold">Total</td>
+                    <td class="fw-bold">700</td>
+                    <td class="fw-bold">175</td>
+                    <td class="fw-bold" th:text="${totalMarks}"></td>
+                    <td></td>
+                </tr>
+                <tr class="table-secondary">
+                    <td colspan="2" class="text-end fw-bold">Percentage</td>
+                    <td colspan="3" class="fw-bold" th:text="${percentage} + '%'"></td>
+                    <td class="grade-a">A</td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <div class="mb-2"><strong>Grading Scale:</strong></div>
+                    <div class="small">
+                        <div><span class="grade-a">A+ (90-100)</span> - Outstanding</div>
+                        <div><span class="grade-a">A (80-89)</span> - Excellent</div>
+                        <div><span class="grade-b">B+ (70-79)</span> - Very Good</div>
+                        <div><span class="grade-b">B (60-69)</span> - Good</div>
+                        <div><span class="grade-c">C (50-59)</span> - Average</div>
+                        <div><span class="grade-c">D (40-49)</span> - Below Average</div>
+                        <div><span class="grade-f">F (Below 40)</span> - Fail</div>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <div class="mb-3">
+                        <div class="result-box" th:text="${division}+ ' Division'">
+                             <i class="fas fa-check-circle ms-1"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="fw-bold">Issue Date:</div>
+                        <div>Certificate No:</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signature Section -->
+            <div class="signature-section">
+                <div class="signature">
+                    <!-- <img th:src="@{/image/principle_sign.png}"
+                            alt="Principal Signature"
+                            style="width:130px; margin-bottom:-10px;" /> -->
+                    <div class="signature-line"></div>
+                    <div>Class Teacher</div>
+                </div>
+                <div class="signature">
+                    <!-- <img th:src="@{/image/principle_sign.png}"
+                            alt="Principal Signature"
+                            style="width:130px; margin-bottom:-10px;" /> -->
+                    <div class="signature-line"></div>
+                    <div>Principal</div>
+                </div>
+                <div class="signature">
+                    <!-- <img th:src="@{/image/principle_sign.png}"
+                            alt="Principal Signature"
+                            style="width:130px; margin-bottom:-10px;" /> -->
+                    <div class="signature-line"></div>
+                    <div>Examination Controller</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script type="text/javascript">
+    function downloadPDF() {
+        const element = document.querySelector('.marksheet');
+
+        const options = {
+            margin: [1, 1, 1, 1],
+            filename: 'marksheet.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a4',
+                orientation: 'portrait'
+            }
+        };
+
+        html2pdf().set(options).from(element).save();
+    }
+</script>
+
+</body>
+</html>

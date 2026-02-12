@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Marksheet Entry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+
+        .card-custom {
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: none;
+        }
+
+        .school-title {
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 20px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #2a5298;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .btn-custom {
+            border-radius: 30px;
+            font-weight: 600;
+            padding: 10px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border: none;
+        }
+
+        .btn-custom:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 576px) {
+            .school-title {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body class="d-flex align-items-center justify-content-center p-3">
+
+<div class="container">
+    <div class="card card-custom p-4">
+
+        <h1 class="text-center text-white bg-primary py-3 rounded school-title"
+            style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
+            EVERGREEN PUBLIC SCHOOL
+        </h1>
+
+        <h4 class="text-center mt-3 mb-4">Student Marksheet Entry</h4>
+
+        <form action="/result" method="POST" enctype="multipart/form-data">
+
+            <!-- Student Info -->
+            <div class="section-title">Student Information</div>
+
+            <div class="mb-3">
+                <label class="form-label">Student Name</label>
+                <input type="text" name="studentName" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Father's Name</label>
+                <input type="text" name="fatherName" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Mother's Name</label>
+                <input type="text" name="motherName" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Date of Birth</label>
+                <input type="date" name="dateOfBirth" class="form-control" required>
+            </div>
+
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <label class="form-label">Roll No</label>
+                    <input type="text" name="rollNo" class="form-control" required>
+                </div>
+
+                <div class="col-6 mb-3">
+                    <label class="form-label">Class</label>
+                    <select name="studentClass" class="form-select" required>
+                        <option value="">Select</option>
+                        <option value="Nursery">Nursery</option>
+                        <option value="L.K.G">L.K.G</option>
+                        <option value="U.K.G">U.K.G</option>
+                        <option value="1st Standard">1st Standard</option>
+                        <option value="2nd Standard">2nd Standard</option>
+                        <option value="3rd Standard">3rd Standard</option>
+                        <option value="4th Standard">4th Standard</option>
+                        <option value="5th Standard">5th Standard</option>
+                        <option value="6th Standard">6th Standard</option>
+                        <option value="7th Standard">7th Standard</option>
+                        <option value="8th Standard">8th Standard</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Marks Section -->
+            <div class="section-title">Marks (Out of 100)</div>
+
+            <div class="row g-2">
+                <div class="col-6"><input type="number" name="hindi" class="form-control" placeholder="Hindi" min="0" max="100" required></div>
+                <div class="col-6"><input type="number" name="english" class="form-control" placeholder="English" min="0" max="100" required></div>
+                <div class="col-6"><input type="number" name="math" class="form-control" placeholder="Math" min="0" max="100" required></div>
+                <div class="col-6"><input type="number" name="science" class="form-control" placeholder="Science" min="0" max="100" required></div>
+                <div class="col-6"><input type="number" name="socialScience" class="form-control" placeholder="Social Science" min="0" max="100" required></div>
+                <div class="col-6"><input type="number" name="gk" class="form-control" placeholder="GK" min="0" max="100" required></div>
+                <div class="col-6"><input type="number" name="drawing" class="form-control" placeholder="Drawing" min="0" max="100" required></div>
+            </div>
+
+            <!-- Photo -->
+            <div class="section-title">Student Photo</div>
+
+            <div class="mb-3">
+                <input type="file" name="studentPhoto" class="form-control" accept="image/*" required>
+            </div>
+
+            <button type="submit" class="btn btn-custom w-100 mt-3 text-white">
+                Generate PDF
+            </button>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
